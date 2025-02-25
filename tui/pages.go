@@ -8,16 +8,17 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/glamour"
 	"github.com/charmbracelet/lipgloss"
+	"github.com/reesmichael1/prezento/slide"
 )
 
 type Pages struct {
-	slides    []string
+	slides    []slide.Slide
 	paginator paginator.Model
 	ready     bool
 	viewport  viewport.Model
 }
 
-func NewPages(slides []string) Pages {
+func NewPages(slides []slide.Slide) Pages {
 	pages := paginator.New()
 	pages.Type = paginator.Dots
 	pages.PerPage = 1
@@ -46,6 +47,13 @@ func (p Pages) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		switch msg.String() {
 		case "q", "esc", "ctrl+c":
 			return p, tea.Quit
+		case "enter":
+			curSlide := p.slides[p.paginator.Page]
+			return p, curSlide.Execute
+			// if curSlide.Kind == slide.CodeSlide {
+			// 	cmds = append(cmds, tea.Cm
+			// 	// return p, tea.Cmd(curSlide.Execute())
+			// }
 		}
 
 	case tea.WindowSizeMsg:
@@ -70,10 +78,26 @@ func (p Pages) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	p.paginator, cmd = p.paginator.Update(msg)
 
-	rendered, err := glamour.Render(p.slides[p.paginator.Page], "dark")
+	rendered, err := glamour.Render(p.slides[p.paginator.Page].Content, "dark")
+	// var rendered string
+
+	// switch p.slides[p.paginator.Page].Kind {
+	// case slide.ContentSlide:
+	// 	var err error
+	// 	rendered, err = glamour.Render(p.slides[p.paginator.Page].Content, "dark")
 	if err != nil {
 		panic(err)
 	}
+	// case slide.CodeSlide:
+	// 	var err error
+	// 	rendered, err = glamour.Render("```sh\n >\n```", "dark")
+	// 	if err != nil {
+	// 		panic(err)
+	// 	}
+	// default:
+	// 	rendered = "uh-oh"
+	// }
+
 	p.viewport.SetContent(rendered)
 
 	cmds = append(cmds, cmd)

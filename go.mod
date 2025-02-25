@@ -1,6 +1,6 @@
 module github.com/reesmichael1/prezento
 
-go 1.24.0
+go 1.24
 
 require (
 	github.com/alecthomas/chroma/v2 v2.14.0 // indirect
@@ -12,6 +12,7 @@ require (
 	github.com/charmbracelet/lipgloss v1.0.0 // indirect
 	github.com/charmbracelet/x/ansi v0.8.0 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
+	github.com/creack/pty v1.1.24 // indirect
 	github.com/dlclark/regexp2 v1.11.0 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
 	github.com/gorilla/css v1.0.1 // indirect
