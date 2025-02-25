@@ -11,10 +11,10 @@ import (
 )
 
 type Pages struct {
-	slides []string
+	slides    []string
 	paginator paginator.Model
-	ready    bool
-	viewport viewport.Model
+	ready     bool
+	viewport  viewport.Model
 }
 
 func NewPages(slides []string) Pages {
@@ -26,7 +26,7 @@ func NewPages(slides []string) Pages {
 	pages.SetTotalPages(len(slides))
 
 	return Pages{
-		slides: slides,
+		slides:    slides,
 		paginator: pages,
 	}
 }
@@ -59,13 +59,8 @@ func (p Pages) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			// we can initialize the viewport. The initial dimensions come in
 			// quickly, though asynchronously, which is why we wait for them
 			// here.
-			p.viewport = viewport.New(msg.Width, msg.Height - footerHeight)
+			p.viewport = viewport.New(msg.Width, msg.Height-footerHeight)
 			// m.viewport.YPosition = 0
-			rendered, err := glamour.Render(p.slides[p.paginator.Page], "dark")
-			if err != nil {
-				panic(err)
-			}
-			p.viewport.SetContent(rendered)
 			p.ready = true
 		} else {
 			p.viewport.Width = msg.Width
@@ -75,12 +70,18 @@ func (p Pages) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	p.paginator, cmd = p.paginator.Update(msg)
 
+	rendered, err := glamour.Render(p.slides[p.paginator.Page], "dark")
+	if err != nil {
+		panic(err)
+	}
+	p.viewport.SetContent(rendered)
+
 	cmds = append(cmds, cmd)
-	
+
 	p.viewport, cmd = p.viewport.Update(msg)
-	
+
 	cmds = append(cmds, cmd)
-	
+
 	return p, tea.Batch(cmds...)
 }
 
