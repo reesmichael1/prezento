@@ -37,19 +37,23 @@ func main() {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
+
 		if line == delimiter {
 			slide := Slide{content: currentSlide}
 			slides = append(slides, slide)
 			currentSlide = ""
 			continue
 		}
+
 		currentSlide += line + "\n"
 	}
+
 	if currentSlide != "" {
 		slides = append(slides, Slide{content: currentSlide})
 	}
 
 	slidesContent := []string{}
+
 	for _, slide := range slides {
 		slidesContent = append(slidesContent, slide.content)
 	}
@@ -57,6 +61,7 @@ func main() {
 	model := tui.NewPages(slidesContent)
 
 	p := tea.NewProgram(model, tea.WithAltScreen(), tea.WithMouseCellMotion())
+
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("error running program: %v\n", err)
 		os.Exit(1)

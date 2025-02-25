@@ -11,10 +11,18 @@ A Terminal UI (TUI) tool by:
 
 ---
 
+# Code & Commands
+
+Inline code like `echo "Hello, World!"` and inline commands, like `$>pwd`, too!
+
+Commands are code blocks prefixed with `$>`
+
+---
+
 # Getting Started
 
-```bash
-$ go run main.go --presentation /path/to/markdown.md
+```$>bash
+ping -c 2 8.8.8.8
 ```
 
 ---
