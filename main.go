@@ -1,7 +1,48 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/reesmichael1/prezento/tui"
+)
+
+type Slide struct {
+	content string
+}
+
+type Slides []Slide
 
 func main() {
-	fmt.Println("Hello world!")
+	file, err := os.Open("./presentation.md")
+	if err != nil {
+		panic(err)
+	}
+
+	slides := Slides{}
+	currentSlide := ""
+	delimiter := "---"
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		if line == delimiter {
+			slide := Slide{content: currentSlide}
+			slides = append(slides, slide)
+			currentSlide = ""
+			continue
+		}
+		currentSlide += line + "\n"
+	}
+	if currentSlide != "" {
+		slides = append(slides, Slide{content: currentSlide})
+	}
+
+	model := tui.New(slides[0].content)
+	p := tea.NewProgram(model, tea.WithAltScreen(), tea.WithMouseCellMotion())
+	if _, err := p.Run(); err != nil {
+		fmt.Println("error running program: %v", err)
+		os.Exit(1)
+	}
 }
