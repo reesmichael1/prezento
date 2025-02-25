@@ -39,7 +39,13 @@ func main() {
 		slides = append(slides, Slide{content: currentSlide})
 	}
 
-	model := tui.New(slides[0].content)
+	slidesContent := []string{}
+	for _, slide := range slides {
+		slidesContent = append(slidesContent, slide.content)
+	}
+
+	model := tui.NewPages(slidesContent)
+
 	p := tea.NewProgram(model, tea.WithAltScreen(), tea.WithMouseCellMotion())
 	if _, err := p.Run(); err != nil {
 		fmt.Println("error running program: %v", err)
