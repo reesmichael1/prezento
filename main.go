@@ -48,7 +48,7 @@ func main() {
 
 	p := tea.NewProgram(model, tea.WithAltScreen(), tea.WithMouseCellMotion())
 	if _, err := p.Run(); err != nil {
-		fmt.Println("error running program: %v", err)
+		fmt.Printf("error running program: %v\n", err)
 		os.Exit(1)
 	}
 }
