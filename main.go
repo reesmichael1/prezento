@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 
@@ -16,7 +17,16 @@ type Slide struct {
 type Slides []Slide
 
 func main() {
-	file, err := os.Open("./presentation.md")
+	presentation := flag.String("presentation", "", "path to the presentation file")
+	flag.Parse()
+
+	if *presentation == "" {
+		fmt.Println("presentation is required")
+		os.Exit(1)
+	}
+
+	file, err := os.Open(*presentation)
+
 	if err != nil {
 		panic(err)
 	}
