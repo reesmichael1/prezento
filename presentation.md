@@ -27,6 +27,12 @@ Currently supported languages:
 
 ---
 
+===
+ping 8.8.8.8
+===
+
+---
+
 ### Bash
 
 ```bash
